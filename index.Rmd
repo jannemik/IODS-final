@@ -1,11 +1,10 @@
 ---
-title: "index"
-author: "Janne Mikkonen"
-date: "12 12 2017"
+title: "Introduction to Open Data Science (IODS)"
+subtitle: "Final Assignment"
+date: "15.12.2017"
+author: 
+- name: "Janne Markus Kristian Mikkonen"
+  affiliation: "janne.mk.mikkonen a helsinki.fi"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
