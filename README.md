@@ -1,2 +1,3 @@
-# IODS-final
-Final assignment, Introduction to Open Data Science, Autumn 2017
+This repository includes my final assignment for the **IODS** course.
+
+The final assignment is published [here](https://jannemik.github.io/IODS-final/).
