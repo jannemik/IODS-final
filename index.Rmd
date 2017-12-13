@@ -7,8 +7,11 @@ author:
   affiliation: "janne.mk.mikkonen a helsinki.fi"
 output: html_document
 ---
+<br>
+<br>
+# Introduction
 
-This report uses a Portuguese student perfomance data set to examine the correspondence of factors related to engagement with school and engagement with relationships and free time. I hypothesize that it is possible to distinguish students who are school-oriented in several aspects from students who are relationship and free time oriented in several aspects. The aspects to be studied are:
+This report uses multiple correspondence analysis on a Portuguese student perfomance data set to examine the correspondence of factors related to engagement with school and engagement with relationships and free time. I hypothesize that it is possible to distinguish students who are school-oriented in several aspects from students who are relationship and free time oriented in several aspects. The aspects to be studied are:
 
 * The amount of free time
 * School absences
@@ -21,4 +24,74 @@ This report uses a Portuguese student perfomance data set to examine the corresp
 * Paid extra classes
 * Having a romantic relationship
 
-I hypothesize that the same "school-oriented" students have less free time, few school absences, high weekly study time, high final grade, low alcohol use, low to medium frequency of going out with friends, high participation to extracurricular activities, courses or reputation as a reason for choosing the school, high participation to paid extra classes, and no romantic relationship. On the other hand, I expect to identify an opposite group that emphasizes free time and relationships, and has chosen the school based on its proximity to home.
+I hypothesize that the same "school-oriented" students have less free time, few school absences, high weekly study time, high final grade, low alcohol use, low to medium frequency of going out with friends, high participation to extracurricular activities, course preference or school reputation as a reason for choosing the school, high participation to paid extra classes, and more commonly no romantic relationship. On the other hand, I expect to identify an opposite group that emphasizes free time and relationships, and has chosen the school based on its proximity to home.
+
+# Data
+
+The data set used in this study comes from two Portuguese secondary-level schools and has been originally collected for studying school performance in Mathematics and Portuguese language. Our analysis data has been previously combined from two separate data files that included the final grades of these subjects and the same background factors. Part of the variables have been used to identify the same students in the two data sets, while other variables have been averaged across the data sets in case of discrepancies. The original data files and more information can be found [here](https://archive.ics.uci.edu/ml/datasets/Student+Performance).
+
+The further adjustments that were made for the purpose of the present study are shown in a script file that can be found [here](https://github.com/jannemik/IODS-final/blob/master/data_wrangling.R). All integer variables have been transformed into factor variables for the purpose of the multiple corresondence analysis (MCA). When tranforming the variables, alcohol use and the number of school absences have been condensed into three classes. Finally, I have also given more informative value labels for the 10 variables that are included in the analysis and removed the variables that are not used in the analysis.
+
+# Descriptive analysis
+
+```{r, results = "hide"}
+setwd("~/Documents/GitHub/IODS-final")
+students <- read.csv(file = "students.csv")
+```
+
+I start by looking at the structure and dimensions of the data set.
+
+```{r}
+str(students)
+dim(students)
+```
+
+There are 382 observations (students) and 10 variables in the data. The 382 students that are included are the ones that could be found in both of the original Math and Portuguese data sets. Following the transformations made to the data, all variables are factor variables with 2-5 levels. Grade is an average of the final grades in Math and Portuguese, and alcohol use is a combination of use on weekdays and weekends. Next, let's look at the distributions of the variables.
+
+```{r}
+library(ggplot2)
+library(tidyr)
+gather(students) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+The graph above displays the distributions of the variables. Because the csv file only includes the value labels, the classes are shown in an alphabetical order, which is partially unintuitive. Having more than 4 absences is less common, but there are still quite many students with more than 8 absences in the data. Participating and not participating in extracurricular activites is about equally common. Most students use low amounts of alcohol, have medium amount of free time and spent medium time with friends according to their own evaluation. Final grades were divided in quartiles, but the groups are not equally large because some of the cutoff classes were especially common. Taking paid extra classes is only slightly less common than not taking them, while course preference, proximity to home and school reputation are all common reasons for school choise. Around one third of the students are in a romantic relationships and most students use 2 to 5 hours a week for studying.
+
+Since all of our variables are factor variables, we cannot summarize their pairwise relationships with correlations. Thus, I will next examine the crosstabulations of a few selected variables that should associated with each other if my hypothesis is correct. I do this by showing row percentages in the tables.
+
+```{r}
+table(students$abs, students$alc3) %>% prop.table(1) %>% round(2)
+table(students$freetime, students$grade) %>% prop.table(1) %>% round(2)
+table(students$romantic, students$studytime) %>% prop.table(1) %>% round(2)
+table(students$paid, students$grade) %>% prop.table(1) %>% round(2)
+table(students$friends, students$reason) %>% prop.table(1) %>% round(2)
+```
+
+We can see that high alcohol use is clearly more common among students with a large number of absences. Surprisingly, there is no clear relationship between the amount of freetime and grades or romantic relationships and study time. Such a lack of clear patterns also applies to the relationships between paid classes and grades as well as going out with friends and reason for school choise. Overall, the results of this preliminary examination are not very convincing with regards to my hypotheses, but despite this I will continue to the multiple correspondence analysis.
+
+# Method
+
+Multiple correspondence analysis (MCA) is a traditional dimensionality reduction method that can be used for identifying underlying structures and patterns in a data with categorical (nominal) variables. It can be considered an extension of the regular correspondence analysis to more than two variables. Simply put, MCA is a method that condences the crosstabulations of the given variables based on an indicator matrix that includes cases as rows and the categories of variables as columns.
+
+# Analysis
+
+I continue by running a multiple correspondence analysis on the 10 variables and by plotting the results with biplots.
+
+```{r}
+library(FactoMineR)
+#Multiple correspondence analysis
+mca <- MCA(students, graph = FALSE)
+
+#Summary of the model
+summary(mca)
+```
+
+```{r}
+#Visualize MCA
+plot(mca, invisible=c("ind"), habillage = "quali")
+```
+
+```{r}
+#Visualize MCA
+plot(mca, invisible=c("var"), habillage = "quali")
+```
+

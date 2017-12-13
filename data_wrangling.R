@@ -2,7 +2,7 @@
 #Email: janne.mk.mikkonen a helsinki.fi
 #Date: 12.12.2017
 
-##Read the combined student alcohol consumption data
+##Read the previously combined student alcohol consumption data
 alc <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/alc.txt", sep=",", header=TRUE)
 
 ##Explore the structure and dimensions of the data
@@ -15,18 +15,18 @@ dim(alc)
 
 #1. Free time
 alc$freetime <- as.factor(alc$freetime)
-levels(alc$friends) <- c("freetime: very low", "freetime: low", "freetime: medium", "freetime: high", "freetime: very high")
+levels(alc$freetime) <- c("freetime: very low", "freetime: low", "freetime: medium", "freetime: high", "freetime: very high")
 
 #2. Absences
 summary(alc$absences)
-#Based on the distribution, create three classes: 0-2, 3-8, over 8
-alc$abs <- cut(alc$absences, breaks = c(0, 2, 8, 75), include.lowest = TRUE, labels = c("0-2 absences", "3-8 absences", "over 8 absences"))
+#Based on the distribution, create three classes: 0, 1-2, 3-8, over 8
+alc$abs <- cut(alc$absences, breaks = c(0, 1, 4, 8, 75), include.lowest = TRUE, labels = c("0-1 absences", "2-4 absences", "5-8 absences", "over 8 absences"))
 
 #3. Study time
 table(alc$studytime)
 #Use the original classification but give labels
-alc$time <- as.factor(alc$studytime)
-levels(alc$time) <- c("<2 h", "2 to 5 h", "5 to 10 h", ">10 h")
+alc$studytime <- as.factor(alc$studytime)
+levels(alc$studytime) <- c("<2 h", "2 to 5 h", "5 to 10 h", ">10 h")
 
 #4. Final grade
 summary(alc$G3)
@@ -44,7 +44,7 @@ levels(alc$friends) <- c("friends: very low", "friends: low", "friends: medium",
 
 ##Keep the 10 variables of interest
 library(dplyr)
-keep_columns <- c("freetime", "abs", "time", "grade", "alc3", "friends", "activities", "reason", "paid", "romantic")
+keep_columns <- c("freetime", "abs", "studytime", "grade", "alc3", "friends", "activities", "reason", "paid", "romantic")
 students <- select(alc, one_of(keep_columns))
 
 ##Give more descriptive class names for "activities", "paid", and romantic
