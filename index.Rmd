@@ -8,3 +8,17 @@ author:
 output: html_document
 ---
 
+This report uses a Portuguese student perfomance data set to examine the correspondence of factors related to engagement with school and engagement with relationships and free time. I hypothesize that it is possible to distinguish students who are school-oriented in several aspects from students who are relationship and free time oriented in several aspects. The aspects to be studied are:
+
+* The amount of free time
+* School absences
+* Weekly study time
+* Final grade
+* Alcohol use
+* Going out with friends
+* Participation in extracurricular activities
+* Reason for choosing the school
+* Paid extra classes
+* Having a romantic relationship
+
+I hypothesize that the same "school-oriented" students have less free time, few school absences, high weekly study time, high final grade, low alcohol use, low to medium frequency of going out with friends, high participation to extracurricular activities, courses or reputation as a reason for choosing the school, high participation to paid extra classes, and no romantic relationship. On the other hand, I expect to identify an opposite group that emphasizes free time and relationships, and has chosen the school based on its proximity to home.
