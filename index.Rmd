@@ -1,7 +1,7 @@
 ---
 title: "Introduction to Open Data Science (IODS)"
 subtitle: "Final Assignment"
-date: "15.12.2017"
+date: "14.12.2017"
 author: 
 - name: "Janne Markus Kristian Mikkonen"
   affiliation: "janne.mk.mikkonen a helsinki.fi"
@@ -9,6 +9,18 @@ output: html_document
 ---
 <br>
 <br>
+
+***
+
+### Abstract
+
+This study examines whether secondary level students can be distinguished from each other based on their orientation towards school and orientation towards free time and relationships. This question is evaluated by performing a multiple correspondence analysis on a school perferformance data set that has been collected from two Portuguese secondary schools. The analysis reveals that students who received a high grade commonly had little free time, spent less time friends, spent more than 10 hours a week for studying, had few absences, and consumed low amounts of alcohol. Also an opposite group and two middle groups could be identified, but the two dimensions were not fully disctinct from each other and some of the included factors did not contribute to defining these dimensions.
+
+***
+
+<br>
+<br>
+
 # Introduction
 
 This report uses multiple correspondence analysis on a Portuguese student perfomance data set to examine the correspondence of factors related to engagement with school and engagement with relationships and free time. I hypothesize that it is possible to distinguish students who are school-oriented in several aspects from students who are relationship and free time oriented in several aspects. The aspects to be studied are:
@@ -24,7 +36,7 @@ This report uses multiple correspondence analysis on a Portuguese student perfom
 * Paid extra classes
 * Having a romantic relationship
 
-I hypothesize that the same "school-oriented" students have less free time, few school absences, high weekly study time, high final grade, low alcohol use, low to medium frequency of going out with friends, high participation to extracurricular activities, course preference or school reputation as a reason for choosing the school, high participation to paid extra classes, and more commonly no romantic relationship. On the other hand, I expect to identify an opposite group that emphasizes free time and relationships, and has chosen the school based on its proximity to home.
+I hypothesize that the same "school-oriented" students have less free time, few school absences, high weekly study time, high final grade, low alcohol use, low to medium frequency of going out with friends, high participation to extracurricular activities, course preference or school reputation as a reason for choosing the school, high participation to paid extra classes, and more commonly no romantic relationship. On the other hand, I expect to identify an opposite group that emphasizes free time and relationships, and has chosen the school based on its proximity to home. Thus, I reckon that I will find two major dimensions in the data: school orientation and free time orientation.
 
 # Data
 
@@ -46,15 +58,17 @@ str(students)
 dim(students)
 ```
 
-There are 382 observations (students) and 10 variables in the data. The 382 students that are included are the ones that could be found in both of the original Math and Portuguese data sets. Following the transformations made to the data, all variables are factor variables with 2-5 levels. Grade is an average of the final grades in Math and Portuguese, and alcohol use is a combination of use on weekdays and weekends. Next, let's look at the distributions of the variables.
+There are 382 observations (students) and 10 variables in the data. The 382 students who are included are the ones that could be found in both of the original Math and Portuguese data sets. Following the transformations made to the data, all variables are factor variables with 2-5 levels. Grade is an average of the final grades in Math and Portuguese, and alcohol use is a combination of alcohol use on weekdays and weekends. Next, let's look at the distributions of the variables.
 
-```{r}
+```{r, warning = FALSE}
 library(ggplot2)
 library(tidyr)
+
+#Draw bar plots
 gather(students) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 ```
 
-The graph above displays the distributions of the variables. Because the csv file only includes the value labels, the classes are shown in an alphabetical order, which is partially unintuitive. Having more than 4 absences is less common, but there are still quite many students with more than 8 absences in the data. Participating and not participating in extracurricular activites is about equally common. Most students use low amounts of alcohol, have medium amount of free time and spent medium time with friends according to their own evaluation. Final grades were divided in quartiles, but the groups are not equally large because some of the cutoff classes were especially common. Taking paid extra classes is only slightly less common than not taking them, while course preference, proximity to home and school reputation are all common reasons for school choise. Around one third of the students are in a romantic relationships and most students use 2 to 5 hours a week for studying.
+The graph above displays the distributions of the variables. Because the csv file only includes the value labels, the classes are shown in an alphabetical order, which is somewhat unintuitive, but enough for the multiple correspondence analysis. Having more than 4 absences is less common, but there are still quite many students with more than 8 absences in the data. Participating and not participating in extracurricular activites is about equally common. Most students use low amounts of alcohol, have medium amount of free time and spent medium time with friends according to their own evaluation. Final grades were divided in quartiles, but the groups are not equally large because some of the cutoff classes were especially common. Taking paid extra classes is only slightly less common than not taking them, while course preference, proximity to home and school reputation are all common reasons for school choise. Around one third of the students are in a romantic relationships and most students use 2 to 5 hours a week for studying.
 
 Since all of our variables are factor variables, we cannot summarize their pairwise relationships with correlations. Thus, I will next examine the crosstabulations of a few selected variables that should associated with each other if my hypothesis is correct. I do this by showing row percentages in the tables.
 
@@ -85,13 +99,27 @@ mca <- MCA(students, graph = FALSE)
 summary(mca)
 ```
 
-```{r}
+```{r, fig.width = 10, fig.height = 10}
 #Visualize MCA
-plot(mca, invisible=c("ind"), habillage = "quali")
+plot(mca, invisible=c("ind"), habillage = "quali", title = "MCA factor map: variables")
 ```
 
-```{r}
+```{r, fig.width = 10, fig.height = 10}
 #Visualize MCA
-plot(mca, invisible=c("var"), habillage = "quali")
+plot(mca, invisible=c("var"), habillage = "quali", title = "MCA factor map: individuals")
 ```
+
+By looking at the summary table, we can see that all of the identified dimensions explain less than 8% of variance in the variables included. This already implies us that we are probably not going to find unequivocally clear underlying patterns in the data. This first impression gains some support when we look at the next graph, which shows how the variable classes are located in the two-dimensional space formed by the dimensions with the largest explanatory power. 
+
+The class locations are far from arbitrary, though. Having very much free time, spending very much time with friends and using high amounts of alcohol are all found on the right side of the graph and hence seem to be interconnected. Meanwhile, very low to medium amounts of free time and low to medium time with friends are on the left. Interestingly, large numbers of absences are found close to high free time, high time with friends, and med-low grades, while low numbers of absences are located close to low alcohol use, very low free time, low time with friends, high grades, and using more than 10 hours a week for studies.
+
+Although the dimensions of school orientation and free time orientation are not as clear as I would have expected, the classes that lie close to each other meet expectations. The most school oriented students are on the top-left corner of the graph and the least school oriented ones on the top-right corner. Bottom-left corner represents a group with medium-high grades and some free time and the bottom-right corner a group with medium-low grades and more free time. The weekly time spent for studies also follows this pattern.
+
+Extracurricular activities, paid extra classes, and romantic relationships seem to be the least important variables with regards to the two dimensions, which can also be seen from their low eta2-values in the summary table. If we look at the variable classes, students spending very little time with friends is clearly distinct from all other factors. Similarly, I would have expected to find low grades closer to high absences, high alcohol use, and high free time and friends.
+
+The second graph shows that many students fall near the middle point of the two dimensions, implying that all students cannot be clearly distinguished from each other with the given set of variables.
+
+#Discussion
+
+I would conclude that my original hypotheses gained moderate but not unambigous support in the multiple correspondence analysis. To some extent, I was able to identify four groups of students with varying degrees of school orientation and freetime/friend orientation, but these groups did not form as clear a two-dimensional continuum as I would have expected and neither did the variable classes fall into two neatly separate dimensions. The solution could probably be improved by removing the variables that did not contribute to defining the dimensions and by including more variables that are related to school performance, free time, and friends.
 
