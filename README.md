@@ -3,4 +3,3 @@ This repository includes my final assignment for the **Introduction to Open Data
 The final assignment is published [here](https://jannemik.github.io/IODS-final/).
 
 Janne Mikkonen
-14.12.2017
