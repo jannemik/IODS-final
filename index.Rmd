@@ -5,7 +5,9 @@ date: "14.12.2017"
 author: 
 - name: "Janne Markus Kristian Mikkonen"
   affiliation: "janne.mk.mikkonen a helsinki.fi"
-output: html_document
+output: 
+  html_document:
+    code_folding: hide
 ---
 <br>
 <br>
@@ -46,12 +48,12 @@ The further adjustments that were made for the purpose of the present study are 
 
 # Descriptive analysis
 
+I start by loading the data and looking at its structure and dimensions.
+
 ```{r, results = "hide"}
 setwd("~/Documents/GitHub/IODS-final")
 students <- read.csv(file = "students.csv")
 ```
-
-I start by looking at the structure and dimensions of the data set.
 
 ```{r}
 str(students)
@@ -60,7 +62,7 @@ dim(students)
 
 There are 382 observations (students) and 10 variables in the data. The 382 students who are included are the ones that could be found in both of the original Math and Portuguese data sets. Following the transformations made to the data, all variables are factor variables with 2-5 levels. Grade is an average of the final grades in Math and Portuguese, and alcohol use is a combination of alcohol use on weekdays and weekends. Next, let's look at the distributions of the variables.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, fig.width = 10, fig.height = 10}
 library(ggplot2)
 library(tidyr)
 
