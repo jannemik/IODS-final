@@ -8,6 +8,7 @@ author:
 output: 
   html_document:
     code_folding: hide
+    theme: yeti
 ---
 <br>
 <br>
@@ -42,9 +43,9 @@ I hypothesize that the same "school-oriented" students have less free time, few 
 
 # Data
 
-The data set used in this study comes from two Portuguese secondary-level schools and has been originally collected for studying school performance in Mathematics and Portuguese language. Our analysis data has been previously combined from two separate data files that included the final grades of these subjects and the same background factors. Part of the variables have been used to identify the same students in the two data sets, while other variables have been averaged across the data sets in case of discrepancies. The original data files and more information can be found [here](https://archive.ics.uci.edu/ml/datasets/Student+Performance).
+The data set used in this study comes from two Portuguese secondary-level schools and has been originally collected for studying school performance in Mathematics and Portuguese language. I have combined two separate data files that included the final grades of these subjects and the same background factors. Part of the variables have been used to identify the same students in the two data sets, while other variables have been averaged across the data sets in case of discrepancies. The original data files and more information can be found [here](https://archive.ics.uci.edu/ml/datasets/Student+Performance).
 
-The further adjustments that were made for the purpose of the present study are shown in a script file that can be found [here](https://github.com/jannemik/IODS-final/blob/master/data_wrangling.R). All integer variables have been transformed into factor variables for the purpose of the multiple corresondence analysis (MCA). When tranforming the variables, alcohol use and the number of school absences have been condensed into three classes. Finally, I have also given more informative value labels for the 10 variables that are included in the analysis and removed the variables that are not used in the analysis.
+The combination of the two data files and The further adjustments that were made for the purpose of the present study are shown in a script file that can be found [here](https://github.com/jannemik/IODS-final/blob/master/data_wrangling.R). All integer variables have been transformed into factor variables for the purpose of the multiple corresondence analysis (MCA). When tranforming the variables, alcohol use and the number of school absences have been condensed into three classes. Finally, I have also given more informative value labels for the 10 variables that are included in the analysis and removed the variables that are not used in the analysis.
 
 # Descriptive analysis
 
@@ -104,11 +105,13 @@ summary(mca)
 ```{r, fig.width = 10, fig.height = 10}
 #Visualize MCA
 plot(mca, invisible=c("ind"), habillage = "quali", title = "MCA factor map: variables")
+mtext("The distribution of variable classes in the two-dimensional space formed by the principal MCA dimensions", side = 3, line = -3)
 ```
 
 ```{r, fig.width = 10, fig.height = 10}
 #Visualize MCA
 plot(mca, invisible=c("var"), habillage = "quali", title = "MCA factor map: individuals")
+mtext("The distribution of individuals (students) in the two-dimensional space formed by the principal MCA dimensions", side = 3, line = -3)
 ```
 
 By looking at the summary table, we can see that all of the identified dimensions explain less than 8% of variance in the variables included. This already implies us that we are probably not going to find unequivocally clear underlying patterns in the data. This first impression gains some support when we look at the next graph, which shows how the variable classes are located in the two-dimensional space formed by the dimensions with the largest explanatory power. 
@@ -124,4 +127,3 @@ The second graph shows that many students fall near the middle point of the two 
 #Discussion
 
 I would conclude that my original hypotheses gained moderate but not unambigous support in the multiple correspondence analysis. To some extent, I was able to identify four groups of students with varying degrees of school orientation and freetime/friend orientation, but these groups did not form as clear a two-dimensional continuum as I would have expected and neither did the variable classes fall into two neatly separate dimensions. The solution could probably be improved by removing the variables that did not contribute to defining the dimensions and by including more variables that are related to school performance, free time, and friends.
-
